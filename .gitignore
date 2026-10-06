@@ -1,4 +1,27 @@
+# ROS2 build artifacts
 build/
 install/
 log/
+
+# Archives
 *.zip
+
+# CAD temp files
+*.swp
+~$*
+*.sldprt.bak
+*.sldasm.bak
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo

@@ -1,0 +1,13 @@
+﻿"Symbol";"Value";"Unit";
+"TraceParts.PartNumber";"90-14082023-033651";"";
+"REFERENCE";"MHL2-10D1";"";
+"SUPPLIER_PART_NUMBER";"70394853";"";
+"rs_stock_number";"70394853";"";
+"TraceParts.PartTitle";"Gripper, Parallel 2-Finger, 10mm, Double Acting, Wide Opening, MH Series";"";
+"SUPPLIER_NAME";"RS Americas";"";
+"SUPPLIER";"SMC Corporation";"";
+"DESIGN";"Gripper, Parallel 2-Finger, 10mm, Double Acting, Wide Opening, MH Series";"";
+"TraceParts.InstanceId";"90-14082023-03365136FDR7KA1GQNQOJK3QTZMLD2H";"";
+"TRACEPARTS";"TRACEPARTS";"";
+"TraceParts.PartLanguage";"en";"";
+"TraceParts.PartVersion";"1.0.1";"";
