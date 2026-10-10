@@ -2,23 +2,28 @@
 <!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
      Commit Version: 1.6.0-1-g15f4949  Build Version: 1.6.7594.29634
      For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
-<robot
-  name="gp7_description">
+<robot name="gp7_description">
+  <link name="world"/>
+  <joint name="world_to_base_joint" type="fixed">
+    <parent link="world"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
   <link
     name="base_link">
     <inertial>
       <origin
-        xyz="0.00096114 0.095474 -3.6559E-06"
+        xyz="0.00096114 3.6559E-06 0.095474"
         rpy="0 0 0" />
       <mass
         value="4.9876" />
       <inertia
         ixx="0.025666"
-        ixy="-0.0001569"
-        ixz="2.6131E-05"
-        iyy="0.021554"
-        iyz="-4.7654E-05"
-        izz="0.025065" />
+        ixy="-2.6131E-05"
+        ixz="-0.0001569"
+        iyy="0.025065"
+        iyz="4.7654E-05"
+        izz="0.021554" />
     </inertial>
     <visual>
       <origin
@@ -48,17 +53,17 @@
     name="link1">
     <inertial>
       <origin
-        xyz="0.00014144 -0.040855 0.021178"
+        xyz="0.0041708 -0.039998 0.024939"
         rpy="0 0 0" />
       <mass
-        value="2.8101" />
+        value="2.9429" />
       <inertia
-        ixx="0.011808"
-        ixy="-1.2219E-06"
-        ixz="1.6989E-06"
-        iyy="0.008767"
-        iyz="0.0021261"
-        izz="0.011003" />
+        ixx="0.011895"
+        ixy="-0.00056458"
+        ixz="0.00019269"
+        iyy="0.0088687"
+        iyz="0.0021049"
+        izz="0.011233" />
     </inertial>
     <visual>
       <origin
@@ -95,7 +100,7 @@
     <child
       link="link1" />
     <axis
-      xyz="0 0 1" />
+      xyz="0 0 0" />
     <limit
       lower="-3.14"
       upper="3.14"
@@ -106,17 +111,17 @@
     name="link2">
     <inertial>
       <origin
-        xyz="-0.02764 -0.095286 0.027544"
+        xyz="-0.042974 -0.060998 0.032441"
         rpy="0 0 0" />
       <mass
-        value="6.2337" />
+        value="6.2336" />
       <inertia
-        ixx="0.1263"
-        ixy="4.2906E-05"
-        ixz="0.0001928"
-        iyy="0.11052"
-        iyz="-0.0004828"
-        izz="0.027756" />
+        ixx="0.12512"
+        ixy="0.0041511"
+        ixz="-0.0066614"
+        iyy="0.10943"
+        iyz="0.011876"
+        izz="0.030023" />
     </inertial>
     <visual>
       <origin
@@ -153,7 +158,7 @@
     <child
       link="link2" />
     <axis
-      xyz="0 1 0" />
+      xyz="0 0 0" />
     <limit
       lower="-3.14"
       upper="3.14"
@@ -164,17 +169,17 @@
     name="link3">
     <inertial>
       <origin
-        xyz="0.01631 0.00085324 0.04527"
+        xyz="-0.017193 0.082791 0.026998"
         rpy="0 0 0" />
       <mass
         value="2.8491" />
       <inertia
-        ixx="0.0066227"
-        ixy="3.179E-05"
-        ixz="-0.00056161"
-        iyy="0.0077915"
-        iyz="-3.6382E-05"
-        izz="0.0085433" />
+        ixx="0.0066302"
+        ixy="-0.00028305"
+        ixz="-0.0004176"
+        iyy="0.0077228"
+        iyz="-0.00014768"
+        izz="0.0086044" />
     </inertial>
     <visual>
       <origin
@@ -211,7 +216,7 @@
     <child
       link="link3" />
     <axis
-      xyz="0 1 0" />
+      xyz="0 0 0" />
     <limit
       lower="-3.14"
       upper="3.14"
@@ -222,17 +227,17 @@
     name="link4">
     <inertial>
       <origin
-        xyz="-0.064677 -0.00016036 -0.00016803"
+        xyz="-0.0918874954007428 -0.0720685110981565 0.0801771201467347"
         rpy="0 0 0" />
       <mass
-        value="2.5884" />
+        value="2.58830653139079" />
       <inertia
-        ixx="0.0028515"
-        ixy="4.0519E-06"
-        ixz="-0.00031863"
-        iyy="0.0099592"
-        iyz="-2.4852E-06"
-        izz="0.01066" />
+        ixx="0.00286150495546667"
+        ixy="0.000110710030490083"
+        ixz="-0.000399832335853405"
+        iyy="0.0101175353251056"
+        iyz="0.000304268553119835"
+        izz="0.0104908424706263" />
     </inertial>
     <visual>
       <origin
@@ -245,7 +250,7 @@
       <material
         name="">
         <color
-          rgba="0.38039 0.47843 0.78824 1" />
+          rgba="0.380392156862745 0.47843137254902 0.788235294117647 1" />
       </material>
     </visual>
     <collision>
@@ -269,7 +274,7 @@
     <child
       link="link4" />
     <axis
-      xyz="1 0 0" />
+      xyz="0 0 0" />
     <limit
       lower="-3.14"
       upper="3.14"
@@ -280,17 +285,17 @@
     name="link5">
     <inertial>
       <origin
-        xyz="0.0002875 0.007161 -0.0019798"
+        xyz="-0.076441133009269 0.0154253270998461 -0.096464152416834"
         rpy="0 0 0" />
       <mass
-        value="0.21715" />
+        value="0.217153741056093" />
       <inertia
-        ixx="0.00012708"
-        ixy="-2.1177E-06"
-        ixz="1.9612E-07"
-        iyy="0.00013149"
-        iyz="-1.2922E-06"
-        izz="0.00017088" />
+        ixx="0.000134307972612185"
+        ixy="-2.65983196602125E-06"
+        ixz="-1.49157908935378E-05"
+        iyy="0.000135096770274714"
+        iyz="1.1995260238967E-05"
+        izz="0.000160040955782472" />
     </inertial>
     <visual>
       <origin
@@ -303,7 +308,7 @@
       <material
         name="">
         <color
-          rgba="0.38039 0.47843 0.78824 1" />
+          rgba="0.380392156862745 0.47843137254902 0.788235294117647 1" />
       </material>
     </visual>
     <collision>
@@ -327,7 +332,7 @@
     <child
       link="link5" />
     <axis
-      xyz="0 1 0" />
+      xyz="0 0 0" />
     <limit
       lower="-3.14"
       upper="3.14"
@@ -338,17 +343,17 @@
     name="link6">
     <inertial>
       <origin
-        xyz="-0.0110690233686856 6.51976894694428E-09 1.35188127359243E-09"
+        xyz="0.000844147432814385 -0.0639057223738075 0.11137795827945"
         rpy="0 0 0" />
       <mass
-        value="0.0287325662674931" />
+        value="0.0529241388543262" />
       <inertia
-        ixx="2.53469772122707E-05"
-        ixy="2.01059247899166E-12"
-        ixz="6.71834425495938E-13"
-        iyy="1.24522557640343E-05"
-        iyz="-6.65113084787812E-11"
-        izz="1.47418802615047E-05" />
+        ixx="3.29832344002963E-05"
+        ixy="2.93181590080063E-06"
+        ixz="3.11751116211456E-06"
+        iyy="1.82661741635831E-05"
+        iyz="1.53452430298696E-06"
+        izz="1.99188924416207E-05" />
     </inertial>
     <visual>
       <origin
@@ -385,7 +390,7 @@
     <child
       link="link6" />
     <axis
-      xyz="1 0 0" />
+      xyz="0 0 0" />
     <limit
       lower="-3.14"
       upper="3.14"
@@ -396,17 +401,17 @@
     name="end_base">
     <inertial>
       <origin
-        xyz="4.16333634234434E-17 -0.0251660721985646 -2.34424330476379E-05"
+        xyz="0.131601404425986 -0.0287918767711668 0.00100206141206338"
         rpy="0 0 0" />
       <mass
-        value="0.0685110730742371" />
+        value="0.068511073074237" />
       <inertia
-        ixx="1.62867903885834E-05"
-        ixy="-2.87991202066462E-20"
-        ixz="-1.6940658945086E-20"
-        iyy="3.71408568435665E-05"
-        iyz="1.10600943718029E-08"
-        izz="3.30427308461686E-05" />
+        ixx="1.98504811192295E-05"
+        ixy="-1.53297537489275E-07"
+        ixz="-6.94118045196653E-06"
+        iyy="3.67713805751471E-05"
+        iyz="1.22640977379238E-06"
+        izz="2.98485163839419E-05" />
     </inertial>
     <visual>
       <origin
@@ -443,23 +448,23 @@
     <child
       link="end_base" />
     <axis
-      xyz="0 1 0" />
+      xyz="0 0 0" />
   </joint>
   <link
     name="left">
     <inertial>
       <origin
-        xyz="-0.0273528261352703 -0.0297197986750348 0.000139211105834813"
+        xyz="0.156538989945313 -0.0336536840454218 0.0121115005102702"
         rpy="0 0 0" />
       <mass
         value="0.0182703887779316" />
       <inertia
-        ixx="4.25987166013242E-06"
-        ixy="-1.39092071868755E-06"
-        ixz="-9.22380843339324E-08"
-        iyy="1.59586829922717E-05"
-        iyz="3.24718801777742E-07"
-        izz="1.67360278742531E-05" />
+        ixx="6.60312899551543E-06"
+        ixy="1.65039044792666E-06"
+        ixz="-4.75844406419661E-06"
+        iyy="1.61525233757751E-05"
+        iyz="2.91394112720159E-07"
+        izz="1.41989301553668E-05" />
     </inertial>
     <visual>
       <origin
@@ -507,17 +512,17 @@
     name="right">
     <inertial>
       <origin
-        xyz="0.0273528261352705 -0.0297197986750347 -0.000139211105834924"
+        xyz="0.10777028822418 -0.0326042607246172 -0.0126533607330763"
         rpy="0 0 0" />
       <mass
         value="0.0182703887779316" />
       <inertia
-        ixx="4.25987166013241E-06"
-        ixy="1.39092071868751E-06"
-        ixz="-9.22380843339361E-08"
-        iyy="1.59586829922718E-05"
-        iyz="-3.24718801777744E-07"
-        izz="1.67360278742532E-05" />
+        ixx="7.26132977010588E-06"
+        ixy="-9.66757913163653E-07"
+        ixz="-5.43205249937537E-06"
+        iyy="1.58916957158233E-05"
+        iyz="-4.34976836351011E-07"
+        izz="1.38015570407281E-05" />
     </inertial>
     <visual>
       <origin
@@ -554,16 +559,17 @@
     <child
       link="right" />
     <axis
-      xyz="0 -1 0" />
+      xyz="0 1 0" />
     <limit
       lower="0"
       upper="0.035"
       effort="50"
       velocity="2" />
   </joint>
-  <ros2_control name="GazeboSystem" type="system">
+
+  <ros2_control name="IgnitionSystem" type="system">
     <hardware>
-      <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+      <plugin>ign_ros2_control/IgnitionSystem</plugin>
     </hardware>
     <joint name="joint1"><command_interface name="position"/><state_interface name="position"/><state_interface name="velocity"/></joint>
     <joint name="joint2"><command_interface name="position"/><state_interface name="position"/><state_interface name="velocity"/></joint>
@@ -575,7 +581,7 @@
     <joint name="right"><command_interface name="position"/><state_interface name="position"/><state_interface name="velocity"/></joint>
   </ros2_control>
   <gazebo>
-    <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+    <plugin filename="ign_ros2_control-system" name="ign_ros2_control::IgnitionROS2ControlPlugin">
       <parameters>$(find gp7_description)/config/controllers.yaml</parameters>
     </plugin>
   </gazebo>

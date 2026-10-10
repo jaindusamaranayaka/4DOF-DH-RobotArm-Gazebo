@@ -107,11 +107,12 @@ sudo apt install -y \
     ros-humble-ros-gz \
     ros-humble-ros2-control \
     ros-humble-ros2-controllers \
-    ros-humble-gazebo-ros2-control \
+    ros-humble-ign-ros2-control \
+    ros-humble-joint-state-publisher-gui \
     python3-colcon-common-extensions
 ```
 
-#### 4. Add ROS 2 sourcing to your shell
+#### 4. Add ROS 2 sourcing & Gazebo paths to your shell
 ```bash
 echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
 source ~/.bashrc
@@ -205,7 +206,9 @@ source install/setup.bash
 | Gazebo window doesn't open (WSL) | Make sure VcXsrv is running, or upgrade to Windows 11 for WSLg |
 | `docker build` fails at network step | Check your internet connection; Docker needs to download ~2 GB |
 | Permission denied on `git push` | Set up SSH keys: `ssh-keygen -t ed25519` then add the key to GitHub |
-| STL meshes not rendering | Ensure mesh file paths in the URDF are relative, not absolute |
+| `Failed to load system plugin [gz_ros2_control-system]` | On ROS 2 Humble (Ignition Fortress), ensure `ros-humble-ign-ros2-control` is installed and the URDF references `ign_ros2_control-system` |
+| `Unable to find file with URI [model://gp7_description/...]` | Ensure `IGN_GAZEBO_RESOURCE_PATH` (or `GZ_SIM_RESOURCE_PATH`) contains your workspace `install/share` directory |
+| Controller spawners timing out on `/controller_manager/list_controllers` | This happens when Gazebo's ros2_control plugin fails to load. Fixing the plugin name/package resolves this |
 
 ---
 
