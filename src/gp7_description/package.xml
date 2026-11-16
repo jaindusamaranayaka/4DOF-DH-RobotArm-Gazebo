@@ -10,6 +10,9 @@ for gp7_description robot</p>
   <maintainer email="maintainers@example.com">EN3563 Robotics Group</maintainer>
   <license>BSD</license>
   <buildtool_depend>ament_cmake</buildtool_depend>
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>trajectory_msgs</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
   <exec_depend>controller_manager</exec_depend>
   <exec_depend>ign_ros2_control</exec_depend>
   <exec_depend>joint_state_broadcaster</exec_depend>

@@ -159,17 +159,27 @@ source install/setup.bash
 
 ---
 
-## Running the Simulation
+## Running the Simulation & Pick-and-Place Mission
 
 After building (via any option above):
 
+### 1. Run Complete Autonomous Pick-and-Place
+Launches Gazebo, spawns the GP7 arm and boxes, starts controllers, and executes the pick-and-place mission automatically:
 ```bash
-# Launch the robot in Gazebo (example — update with your actual launch file)
-ros2 launch gp7_description gazebo.launch.py
+ros2 launch gp7_description pick_and_place.launch.py
 ```
 
+### 2. Or Run Separately (Manual)
 ```bash
-# View the robot model in RViz
+# Terminal 1: Launch Gazebo simulation
+ros2 launch gp7_description gazebo.launch.py
+
+# Terminal 2: Run pick-and-place Python controller
+ros2 run gp7_description pick_and_place.py
+```
+
+### 3. View the Robot in RViz (Model Inspection)
+```bash
 ros2 launch gp7_description display.launch.py
 ```
 
