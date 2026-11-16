@@ -6,6 +6,9 @@ log/
 # Archives
 *.zip
 
+# SolidWorks URDF export artifacts
+export.log
+
 # CAD temp files
 *.swp
 ~$*

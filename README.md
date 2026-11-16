@@ -6,20 +6,33 @@ A ROS2 workspace for simulating a 4-DOF robot arm (based on the Yaskawa GP7) in 
 
 ```
 4DOF-DH-RobotArm-Gazebo/
-├── docs/                  # Project documentation & datasheets
+├── docs/                           # Project documentation & datasheets
 │   ├── Task_sheet.pdf
 │   ├── EN3563_Project_Plan.pdf
 │   ├── G7_manual.pdf
 │   └── GP7_GP8_datasheet.pdf
-├── cad/                   # CAD files & robot models
-│   ├── solidworks/        # SolidWorks source files (.SLDPRT, .SLDASM)
-│   │   └── GP7 components/
-│   ├── meshes/            # Exported mesh files for URDF/Gazebo (.stl, .dae)
-│   └── urdf/              # URDF / XACRO robot description files
-├── src/                   # ROS2 packages
-├── config/                # ROS2 config & parameter YAML files
-├── launch/                # ROS2 launch files
-├── worlds/                # Gazebo world files (.sdf, .world)
+├── cad/                            # CAD source files & export data
+│   ├── solidworks/                 # SolidWorks source files (.SLDPRT, .SLDASM)
+│   └── gp7_description.csv        # SolidWorks URDF export reference data
+├── src/                            # ROS 2 packages
+│   └── gp7_description/           # Main robot description package
+│       ├── config/                 # Controller YAML configs
+│       │   ├── controllers.yaml
+│       │   └── joint_names_gp7_description.yaml
+│       ├── launch/                 # ROS 2 launch files
+│       │   ├── display.launch.py   # RViz visualisation
+│       │   └── gazebo.launch.py    # Gazebo simulation
+│       ├── meshes/                 # STL mesh files for URDF
+│       ├── rviz/                   # RViz config
+│       │   └── gp7.rviz
+│       ├── urdf/                   # Robot description
+│       │   └── gp7_description.urdf
+│       ├── worlds/                 # Gazebo world files
+│       │   └── gp7.world.sdf
+│       ├── CMakeLists.txt
+│       ├── model.config
+│       └── package.xml
+├── Dockerfile
 └── .gitignore
 ```
 
@@ -29,12 +42,13 @@ A ROS2 workspace for simulating a 4-DOF robot arm (based on the Yaskawa GP7) in 
 |--------|---------|
 | `docs/` | Reference manuals, datasheets, and project planning documents |
 | `cad/solidworks/` | Original SolidWorks CAD source files for the GP7 robot |
-| `cad/meshes/` | Exported STL/DAE mesh files for use in URDF and Gazebo |
-| `cad/urdf/` | URDF and XACRO files describing robot kinematics & visuals |
-| `src/` | ROS2 packages (controllers, kinematics, planning, etc.) |
-| `config/` | YAML configuration files for ROS2 nodes and controllers |
-| `launch/` | ROS2 launch files to start simulation and nodes |
-| `worlds/` | Gazebo world definitions for simulation environments |
+| `cad/` | SolidWorks export CSV with link/joint reference data |
+| `src/gp7_description/` | ROS 2 description package (URDF, meshes, launch, config, worlds) |
+| `src/gp7_description/config/` | YAML configuration for ros2_control controllers |
+| `src/gp7_description/launch/` | ROS 2 Python launch files for RViz and Gazebo |
+| `src/gp7_description/meshes/` | STL mesh files referenced by the URDF |
+| `src/gp7_description/urdf/` | URDF robot description |
+| `src/gp7_description/worlds/` | Gazebo SDF world definitions |
 
 ## Getting Started
 
