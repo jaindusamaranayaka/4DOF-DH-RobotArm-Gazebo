@@ -4,7 +4,7 @@ project(gp7_description)
 
 find_package(ament_cmake REQUIRED)
 
-install(DIRECTORY config launch meshes rviz urdf worlds
+install(DIRECTORY config launch meshes rviz urdf worlds scripts
   DESTINATION share/${PROJECT_NAME})
 
 install(PROGRAMS
