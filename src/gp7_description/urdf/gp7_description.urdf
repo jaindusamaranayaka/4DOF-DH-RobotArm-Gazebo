@@ -490,7 +490,7 @@
     </collision>
   </link>
   <joint
-    name="left"
+    name="left_finger_joint"
     type="prismatic">
     <origin
       xyz="0 0 0"
@@ -548,7 +548,7 @@
     </collision>
   </link>
   <joint
-    name="right"
+    name="right_finger_joint"
     type="prismatic">
     <origin
       xyz="0 0 0"
@@ -575,8 +575,8 @@
     <joint name="joint3"><command_interface name="position"/><state_interface name="position"/><state_interface name="velocity"/></joint>
     <joint name="joint5"><command_interface name="position"/><state_interface name="position"/><state_interface name="velocity"/></joint>
     <joint name="joint6"><command_interface name="position"/><state_interface name="position"/><state_interface name="velocity"/></joint>
-    <joint name="left"><command_interface name="position"/><state_interface name="position"/><state_interface name="velocity"/></joint>
-    <joint name="right"><command_interface name="position"/><state_interface name="position"/><state_interface name="velocity"/></joint>
+    <joint name="left_finger_joint"><command_interface name="position"/><state_interface name="position"/><state_interface name="velocity"/></joint>
+    <joint name="right_finger_joint"><command_interface name="position"/><state_interface name="position"/><state_interface name="velocity"/></joint>
   </ros2_control>
   <gazebo>
     <plugin filename="ign_ros2_control-system" name="ign_ros2_control::IgnitionROS2ControlPlugin">

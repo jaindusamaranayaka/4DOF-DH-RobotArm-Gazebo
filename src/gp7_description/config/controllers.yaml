@@ -20,6 +20,6 @@ arm_controller:
 
 gripper_controller:
   ros__parameters:
-    joints: [left, right]
+    joints: [left_finger_joint, right_finger_joint]
     interface_name: position
 
