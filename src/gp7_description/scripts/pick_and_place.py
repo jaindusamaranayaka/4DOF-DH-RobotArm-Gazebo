@@ -2,15 +2,17 @@
 """
 GP7 Robot Arm — Pick and Place Autonomous Controller
 EN3563 Robotics Mini Project Task:
-  1. Pick up Box B (5 cm x 5 cm x 5 cm) from ground at (0.50, -0.20, 0.025 m).
+  1. Pick up Box B (5 cm x 5 cm x 5 cm) from ground at (0.50, -0.50, 0.025 m).
      - Approach vertically from above with the gripper pointing straight down.
-     - Symmetrically grasp Box B.
-     - Lift vertically along the Z-axis.
+     - Fingers open wide (displacement = 0.030 m) during hover and descent.
+     - Symmetrically clamp Box B (displacement = 0.000 m).
+     - Lift vertically along the Z-axis to Z = 0.280 m.
   2. Maintain Box B strictly upright (orientation unchanged) during the entire motion.
-  3. Place Box B on top of Box A (30 cm x 30 cm x 20 cm) platform at (0.45, 0.45, 0.10 m).
-     - Platform top surface is at Z = 0.20 m.
-     - Descend vertically from above and place Box B at Z = 0.245 m atop the platform.
-     - Release Box B and retract vertically upward.
+  3. Place Box B on top of Box A (30 cm x 30 cm x 20 cm) platform at (0.50, 0.50, 0.100 m).
+     - Platform top surface is at Z = 0.200 m.
+     - Descend vertically from above and place Box B at Z = 0.255 m atop Box A.
+     - Open fingers (displacement = 0.030 m) to release Box B.
+     - Retract vertically upward to Z = 0.360 m.
   4. Smooth quintic/trapezoidal velocity trajectory planning.
 """
 
@@ -48,7 +50,7 @@ class GP7Kinematics:
       - Upper Arm Length (J2 to J3):   0.4406 m (440.6 mm)
       - Forearm Length (J3 to J5):     0.4425 m (442.5 mm)
       - Tool Flange Length (J5 to EE): 0.1108 m (110.8 mm)
-      - Finger Grip Center Offset:     0.0250 m (25.0 mm)
+      - Finger Grip Center Offset:     0.0300 m (30.0 mm)
     """
 
     @staticmethod
@@ -106,33 +108,53 @@ class GP7Kinematics:
                 T = T @ T_loc
         return T
 
+    def fk_frames(self, q):
+        """Compute transformation matrices for all key frames."""
+        T = np.eye(4)
+        rev_i = 0
+        frames = {}
+        for i, (name, xyz, rpy, axis, is_rev) in enumerate(self.joints):
+            T_loc, ax, is_r = self.fixed_T[i]
+            if is_r:
+                R_j = np.eye(4)
+                R_j[:3, :3] = self.rot_axis(ax, q[rev_i])
+                T = T @ T_loc @ R_j
+                rev_i += 1
+            else:
+                T = T @ T_loc
+            frames[name] = T.copy()
+        return frames
+
     def solve_ik_vertical(self, target_pos, q_seed=None):
         """
         Solves Inverse Kinematics for a target (x, y, z) position enforcing
-        strict top-down vertical gripper orientation: tool vector = [0, 0, -1].
+        strict top-down vertical gripper orientation:
+          - link6 approach Z-axis points straight DOWN [0, 0, -1]
+          - Joint 5 is strictly POSITIVE (link5 is above gripper, reaching down)
+          - Joint 6 roll is 0.
         """
         from scipy.optimize import minimize
         target = np.array(target_pos, dtype=float)
         tx, ty, tz = target
 
         if q_seed is None:
-            # Analytical seed: base yaw offset is approx yaw_target - 3.085 rad
             yaw_t = np.arctan2(ty, tx)
             q1_est = (yaw_t - 3.085 + np.pi) % (2 * np.pi) - np.pi
-            q_init = np.array([q1_est, 1.0, -0.2, -1.8, 0.0])
+            q_init = np.array([q1_est, 1.0, 0.1, 0.9, 0.0])
         else:
             q_init = np.array(q_seed)
 
         def obj(q):
-            T = self.fk(q)
-            pos_err = np.sum((T[:3, 3] - target)**2)
-            # Enforce local tool X-axis to point straight down along -Z
-            down_err = np.sum((T[:3, 0] - np.array([0.0, 0.0, -1.0]))**2)
+            fr = self.fk_frames(q)
+            p_eb = fr['base1'][:3, 3]
+            tool_z = fr['joint6'][:3, 2]  # Tool approach direction (+Z of link6)
+            pos_err = np.sum((p_eb - target)**2)
+            down_err = np.sum((tool_z - np.array([0.0, 0.0, -1.0]))**2)
             j6_pen = (q[4])**2 * 0.01
             smooth = np.sum((q - q_init)**2) * 0.001
             return pos_err * 500.0 + down_err * 50.0 + j6_pen + smooth
 
-        res = minimize(obj, q_init, bounds=[(-3.14, 3.14)] * 5, method='SLSQP')
+        res = minimize(obj, q_init, bounds=[(-3.14, 3.14), (-1.13, 2.53), (-1.22, 3.31), (0.0, 2.35), (-3.14, 3.14)], method='SLSQP')
         return res.x
 
 
@@ -177,7 +199,11 @@ class PickAndPlaceNode(Node):
         time.sleep(cumulative_time + 0.5)
 
     def set_gripper(self, displacement, wait_time=1.5):
-        """Commands gripper fingers to open (0.0) or close (0.024 m)."""
+        """
+        Controls prismatic gripper fingers:
+          - displacement = 0.030 m: OPEN (gap = 11.5 cm)
+          - displacement = 0.000 m: CLOSED / CLAMP (gap = 5.4 cm, firmly grips 5 cm Box B)
+        """
         msg = Float64MultiArray()
         msg.data = [float(displacement), float(displacement)]
         self.gripper_pub.publish(msg)
@@ -191,68 +217,68 @@ class PickAndPlaceNode(Node):
         # 1. Physical Environment & Target Coordinates (from gp7.world.sdf and URDF)
         # =========================================================================
         # Box B (Pick):
-        #   - Position: (0.50, -0.20, 0.025 m), 5 cm cube on the ground.
-        #   - Pre-Grasp Hover: (0.50, -0.20, 0.150 m) — 15 cm above ground, fingers open.
-        #   - Grasp: (0.50, -0.20, 0.045 m) — pure vertical descent onto Box B.
-        #   - Vertical Lift: (0.50, -0.20, 0.280 m) — 28 cm above ground, clear of all obstacles.
+        #   - Position: (0.50, -0.50, 0.025 m), 5 cm cube resting on the ground.
+        #   - Pre-Grasp Hover: (0.50, -0.50, 0.160 m) — 11 cm above Box B, fingers open wide.
+        #   - Vertical Grasp:  (0.50, -0.50, 0.055 m) — pure vertical descent onto Box B.
+        #   - Vertical Lift:   (0.50, -0.50, 0.280 m) — 28 cm above ground, clear of all obstacles.
         #
         # Box A (Place Destination Platform):
-        #   - Position: (0.45, 0.45, 0.100 m), 30 cm x 30 cm x 20 cm box on the ground.
+        #   - Position: (0.50, 0.50, 0.100 m), 30 cm x 30 cm x 20 cm box on the ground.
         #   - Platform top surface is at Z = 0.200 m.
-        #   - Box B center when placed on Box A is at Z = 0.225 m.
-        #   - Place Height: (0.45, 0.45, 0.245 m) — pure vertical descent onto Box A.
-        #   - Pre-Place Hover: (0.45, 0.45, 0.350 m) — 15 cm above Box A surface.
-        #   - Retract: (0.45, 0.45, 0.350 m) — pure vertical ascent after release.
+        #   - Pre-Place Hover: (0.50, 0.50, 0.360 m) — 16 cm above Box A surface.
+        #   - Vertical Place:  (0.50, 0.50, 0.255 m) — Box B rests cleanly on top of Box A.
+        #   - Vertical Retract:(0.50, 0.50, 0.360 m) — pure vertical ascent after release.
 
         # =========================================================================
-        # 2. Top-Down Kinematic Waypoints (Strictly Vertical Tool: [0, 0, -1])
+        # 2. Top-Down Kinematic Waypoints (Tool Vector [0, 0, -1], Joint 5 Positive)
         # =========================================================================
         # Joint vector format: [joint1, joint2, joint3, joint5, joint6]
-        q_home      = [-1.5459,  0.0017, -0.4859,  0.0000,  0.0000]  # Elevated safe parking
-        q_pregrasp  = [ 2.8421,  1.2279, -0.2386, -1.6700, -0.4742]  # Above Box B at Z = 0.150 m
-        q_grasp     = [ 2.8570,  1.4642, -0.0516, -1.6191, -0.7515]  # Vertical grasp at Z = 0.045 m
-        q_lift      = [ 2.8271,  0.9336, -0.3951, -1.8086, -0.0508]  # Vertical lift to Z = 0.280 m
-        q_transit   = [ 0.2694,  0.9112, -0.2786, -1.9472, -0.1261]  # Upright transit arc at Z = 0.311 m
-        q_preplace  = [-2.2884,  0.8889, -0.1622, -2.0859, -0.2014]  # Above Box A at Z = 0.350 m
-        q_place     = [-2.2796,  1.0946, -0.0835, -1.9585, -0.4189]  # Vertical place at Z = 0.245 m
-        q_retract   = [-2.2884,  0.8889, -0.1622, -2.0859, -0.2014]  # Vertical retract to Z = 0.350 m
+        q_home      = [-1.5459,  0.0017, -0.4859,  0.0000,  0.0000]  # Safe elevated parking
+        q_pregrasp  = [ 2.4316,  0.9367,  0.0586,  0.8941,  0.0000]  # Hover above Box B (0.50, -0.50, 0.160 m)
+        q_grasp     = [ 2.4411,  1.1207,  0.1209,  1.0158,  0.0000]  # Vertical grasp at (0.50, -0.50, 0.055 m)
+        q_lift      = [ 2.4239,  0.7568,  0.0576,  0.7153,  0.0000]  # Vertical lift to Z = 0.280 m
+        q_transit   = [ 0.0662,  0.7084,  0.0781,  0.6465,  0.0000]  # Smooth elevated horizontal transit arc
+        q_preplace  = [-2.2916,  0.6600,  0.0985,  0.5778,  0.0000]  # Hover above Box A (0.50, 0.50, 0.360 m)
+        q_place     = [-2.2871,  0.7911,  0.0517,  0.7555,  0.0000]  # Vertical place atop Box A (0.50, 0.50, 0.255 m)
+        q_retract   = [-2.2916,  0.6600,  0.0985,  0.5778,  0.0000]  # Vertical retract to Z = 0.360 m
 
-        # Step 1: Open Gripper & Move to Pre-Grasp above Box B
-        self.get_logger().info('Step 1: Opening gripper...')
-        self.set_gripper(0.0)
+        # Step 1: Open Gripper Wide (0.030 m)
+        self.get_logger().info('Step 1: Opening gripper wide (displacement = 0.030 m)...')
+        self.set_gripper(0.030)
 
-        self.get_logger().info('Step 2: Moving above Box B (Top-Down Pre-Grasp at 0.50, -0.20, 0.15 m)...')
+        # Step 2: Move to Pre-Grasp directly above Box B
+        self.get_logger().info('Step 2: Moving above Box B (Top-Down Pre-Grasp at 0.50, -0.50, 0.160 m)...')
         self.publish_trajectory([q_home, q_pregrasp], [2.0, 3.5])
 
-        # Step 2: Descend vertically onto Box B
-        self.get_logger().info('Step 3: Descending vertically onto Box B (Top-Down Grasp at 0.50, -0.20, 0.045 m)...')
+        # Step 3: Descend vertically onto Box B
+        self.get_logger().info('Step 3: Descending vertically onto Box B (Z = 0.055 m)...')
         self.publish_trajectory([q_pregrasp, q_grasp], [0.5, 2.0])
 
-        # Step 3: Symmetrically Clamp Box B
-        self.get_logger().info('Step 4: Grasping Box B (closing fingers symmetrically inward)...')
-        self.set_gripper(0.024, wait_time=2.0)
+        # Step 4: Symmetrically Clamp Box B (0.000 m = closed grip)
+        self.get_logger().info('Step 4: Clamping Box B firmly (displacement = 0.000 m)...')
+        self.set_gripper(0.000, wait_time=2.0)
 
-        # Step 4: Vertical Lift (Keeping Box B strictly upright)
-        self.get_logger().info('Step 5: Lifting Box B vertically to Z = 0.28 m (maintaining upright orientation)...')
+        # Step 5: Vertical Lift (Keeping Box B strictly upright)
+        self.get_logger().info('Step 5: Lifting Box B vertically to Z = 0.280 m (upright)...')
         self.publish_trajectory([q_grasp, q_lift], [0.5, 2.0])
 
-        # Step 5: Smooth Horizontal Transit Arc toward Box A
+        # Step 6: Smooth Horizontal Transit Arc toward Box A
         self.get_logger().info('Step 6: Smooth transit toward Box A (holding Box B strictly upright)...')
         self.publish_trajectory([q_lift, q_transit, q_preplace], [0.5, 3.5, 3.5])
 
-        # Step 6: Descend vertically onto Box A platform
-        self.get_logger().info('Step 7: Lowering Box B vertically onto Box A platform (Z = 0.245 m)...')
+        # Step 7: Descend vertically onto Box A platform
+        self.get_logger().info('Step 7: Lowering Box B vertically onto Box A platform (Z = 0.255 m)...')
         self.publish_trajectory([q_preplace, q_place], [0.5, 2.0])
 
-        # Step 7: Release Box B
-        self.get_logger().info('Step 8: Releasing Box B on Box A...')
-        self.set_gripper(0.0, wait_time=2.0)
+        # Step 8: Open Gripper to Release Box B (0.030 m = open)
+        self.get_logger().info('Step 8: Releasing Box B on Box A (displacement = 0.030 m)...')
+        self.set_gripper(0.030, wait_time=2.0)
 
-        # Step 8: Retract vertically upward
-        self.get_logger().info('Step 9: Retracting gripper vertically upward to Z = 0.35 m...')
+        # Step 9: Retract vertically upward
+        self.get_logger().info('Step 9: Retracting gripper vertically upward to Z = 0.360 m...')
         self.publish_trajectory([q_place, q_retract], [0.5, 2.0])
 
-        # Step 9: Return to Safe Parking Home Position
+        # Step 10: Return to Safe Parking Home Position
         self.get_logger().info('Step 10: Returning to Home position...')
         self.publish_trajectory([q_retract, q_home], [0.5, 3.5])
 
