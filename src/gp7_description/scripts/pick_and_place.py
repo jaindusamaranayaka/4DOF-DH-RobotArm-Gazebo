@@ -214,9 +214,11 @@ class PickAndPlaceNode(Node):
             msg.points.append(point)
 
         self.arm_pub.publish(msg)
-        time.sleep(cumulative_time + 0.5)
+        # Keep a small settling margin; the previous 0.5 s per waypoint
+        # compounded into long pauses throughout the mission.
+        time.sleep(cumulative_time + 0.15)
 
-    def set_gripper(self, displacement, wait_time=1.5):
+    def set_gripper(self, displacement, wait_time=0.6):
         """
         Controls prismatic gripper fingers:
           - displacement = 0.030 m: OPEN (gap = 11.5 cm)
@@ -236,7 +238,7 @@ class PickAndPlaceNode(Node):
 
     def execute_mission(self):
         self.get_logger().info('Starting Pick-and-Place Task in 3 seconds...')
-        time.sleep(3.0)
+        time.sleep(1.0)
 
         # =========================================================================
         # 1. Physical Environment & Target Coordinates (from gp7.world.sdf and URDF)
@@ -262,7 +264,8 @@ class PickAndPlaceNode(Node):
         q_pregrasp  = [ 2.4316,  0.9367,  0.0586,  0.8941,  0.7854]  # Hover above Box B (0.50, -0.50, 0.160 m)
         q_grasp     = [ 2.4411,  1.1800,  0.1209,  1.0158,  0.7854]  # Vertical grasp at (0.50, -0.50, 0.055 m)
         q_lift      = [ 2.4239,  0.7568,  0.0576,  0.7153,  0.7854]  # Vertical lift to Z = 0.280 m
-        q_transit   = [ 0.0662,  0.7084,  0.0781,  0.6465, 0.7854]  # Smooth elevated horizontal transit arc
+        q_transit1  = [ 1.5200,  0.7200,  0.0700,  0.6800,  0.7854]  # Gradual shoulder rotation while lifted
+        q_transit2  = [ 0.4200,  0.7000,  0.0800,  0.6400,  0.7854]  # Continue elevated rotation toward Box A
         q_preplace  = [-2.2916,  0.6600,  0.0985,  0.5778,  0.7854]  # Hover above Box A (0.50, 0.50, 0.360 m)
         q_place     = [-2.2871,  0.7911,  0.0517,  0.7555,  0.7854]  # Vertical place atop Box A (0.50, 0.50, 0.255 m)
         q_retract   = [-2.2916,  0.6600,  0.0985,  0.5778,  0.7854]  # Vertical retract to Z = 0.360 m
@@ -280,24 +283,24 @@ class PickAndPlaceNode(Node):
         self.publish_trajectory([q_pregrasp, q_grasp], [0.5, 2.0])
 
         # Step 4: Symmetrically Clamp Box B (0.000 m = closed grip)
-        self.get_logger().info('Step 4: Clamping Box B firmly (displacement = 0.000 m)...')
-        self.set_gripper(-0.03, wait_time=2.0)
+        self.get_logger().info('Step 4: Clamping Box B firmly (displacement = -0.035 m)...')
+        self.set_gripper(-0.035, wait_time=0.8)
 
         # Step 5: Vertical Lift (Keeping Box B strictly upright)
         self.get_logger().info('Step 5: Lifting Box B vertically to Z = 0.280 m (upright)...')
-        self.publish_trajectory([q_grasp, q_lift], [0.5, 2.0])
+        self.publish_trajectory([q_grasp, q_lift], [0.5, 3.0])
 
         # Step 6: Smooth Horizontal Transit Arc toward Box A
         self.get_logger().info('Step 6: Smooth transit toward Box A (holding Box B strictly upright)...')
-        self.publish_trajectory([q_lift, q_transit, q_preplace], [0.5, 3.5, 3.5])
+        self.publish_trajectory([q_lift, q_transit1, q_transit2, q_preplace], [0.5, 3.0, 3.0, 3.0])
 
         # Step 7: Descend vertically onto Box A platform
         self.get_logger().info('Step 7: Lowering Box B vertically onto Box A platform (Z = 0.255 m)...')
-        self.publish_trajectory([q_preplace, q_place], [0.5, 2.0])
+        self.publish_trajectory([q_preplace, q_place], [0.5, 2.5])
 
         # Step 8: Open Gripper to Release Box B (0.030 m = open)
         self.get_logger().info('Step 8: Releasing Box B on Box A (displacement = 0.030 m)...')
-        self.set_gripper(0.030, wait_time=2.0)
+        self.set_gripper(0.030, wait_time=0.8)
 
         # Step 9: Retract vertically upward
         self.get_logger().info('Step 9: Retracting gripper vertically upward to Z = 0.360 m...')
