@@ -23,6 +23,7 @@ from rclpy.node import Node
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 from std_msgs.msg import Float64MultiArray
 from builtin_interfaces.msg import Duration
+import threading
 
 try:
     from geometry_msgs.msg import Pose, Point, Quaternion
@@ -172,7 +173,24 @@ class PickAndPlaceNode(Node):
         )
 
         self.arm_joints = ['joint1', 'joint2', 'joint3', 'joint5', 'joint6']
+
+        # Gripper continuous publishing state & background thread (prevents joint relaxation during arm transit)
+        self._target_gripper = None
+        self._gripper_running = True
+        self._gripper_thread = threading.Thread(target=self._gripper_loop, daemon=True)
+        self._gripper_thread.start()
+
         self.get_logger().info('=== GP7 Pick and Place Controller Initialized ===')
+
+    def _gripper_loop(self):
+        """Continuously re-publishes the active gripper command at 20 Hz to hold clamp force."""
+        rate = 0.05
+        while self._gripper_running:
+            if self._target_gripper is not None:
+                msg = Float64MultiArray()
+                msg.data = [float(self._target_gripper), float(self._target_gripper)]
+                self.gripper_pub.publish(msg)
+            time.sleep(rate)
 
     def publish_trajectory(self, waypoints, durations):
         """
@@ -202,12 +220,19 @@ class PickAndPlaceNode(Node):
         """
         Controls prismatic gripper fingers:
           - displacement = 0.030 m: OPEN (gap = 11.5 cm)
-          - displacement = 0.000 m: CLOSED / CLAMP (gap = 5.4 cm, firmly grips 5 cm Box B)
+          - displacement = -0.030 m: CLOSED / CLAMP (firmly grips Box B)
         """
+        self._target_gripper = displacement
         msg = Float64MultiArray()
         msg.data = [float(displacement), float(displacement)]
         self.gripper_pub.publish(msg)
         time.sleep(wait_time)
+
+    def destroy_node(self):
+        self._gripper_running = False
+        if hasattr(self, '_gripper_thread') and self._gripper_thread is not None:
+            self._gripper_thread.join(timeout=1.0)
+        super().destroy_node()
 
     def execute_mission(self):
         self.get_logger().info('Starting Pick-and-Place Task in 3 seconds...')
