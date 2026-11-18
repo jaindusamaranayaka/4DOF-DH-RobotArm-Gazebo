@@ -36,6 +36,7 @@
         </visual>
       </link>
     </model>
+
     <!-- Box A: destination platform (0.3 x 0.3 x 0.2 m).
          Placed at (0.50, 0.50, 0.10) -> Top surface at z = 0.20 m. -->
     <model name="box_a">
@@ -43,27 +44,53 @@
       <pose>0.50 0.50 0.1 0 0 0</pose>
       <link name="link">
         <collision name="collision"><geometry><box><size>0.3 0.3 0.2</size></box></geometry></collision>
-        <visual name="visual"><geometry><box><size>0.3 0.3 0.2</size></box></geometry><material><ambient>0.2 0.8 0.2 1</ambient><diffuse>0.2 0.8 0.2 1</diffuse></material></visual>
+        <visual name="visual">
+          <geometry><box><size>0.3 0.3 0.2</size></box></geometry>
+          <material><ambient>0.2 0.8 0.2 1</ambient><diffuse>0.2 0.8 0.2 1</diffuse></material>
+        </visual>
       </link>
     </model>
+
     <!-- Box B: small object to pick (0.05 x 0.05 x 0.05 m).
          Placed at (0.50, -0.50, 0.025) -> R = 0.707 m, symmetric with Box A. -->
     <model name="box_b">
       <pose>0.50 -0.50 0.025 0 0 0</pose>
       <link name="link">
-        <inertial><mass>0.08</mass><inertia><ixx>3.333e-5</ixx><iyy>3.333e-5</iyy><izz>3.333e-5</izz></inertia></inertial>
+        <inertial>
+          <mass>0.05</mass>
+          <!-- Inertia of a uniform 5 cm cube: (1/6)*m*a^2 = 2.0833e-5 -->
+          <inertia>
+            <ixx>2.0833e-5</ixx>
+            <iyy>2.0833e-5</iyy>
+            <izz>2.0833e-5</izz>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyz>0</iyz>
+          </inertia>
+        </inertial>
         <collision name="collision">
           <geometry><box><size>0.05 0.05 0.05</size></box></geometry>
           <surface>
             <friction>
               <ode>
-                <mu>2.0</mu>
-                <mu2>2.0</mu2>
+                <mu>100000.0</mu>
+                <mu2>100000.0</mu2>
               </ode>
             </friction>
+            <contact>
+              <ode>
+                <kp>10.0</kp>
+                <kd>1.0</kd>
+                <min_depth>0.025</min_depth>
+                <max_vel>0.0</max_vel>
+              </ode>
+            </contact>
           </surface>
         </collision>
-        <visual name="visual"><geometry><box><size>0.05 0.05 0.05</size></box></geometry><material><ambient>0.9 0.15 0.1 1</ambient><diffuse>0.9 0.15 0.1 1</diffuse></material></visual>
+        <visual name="visual">
+          <geometry><box><size>0.05 0.05 0.05</size></box></geometry>
+          <material><ambient>0.9 0.15 0.1 1</ambient><diffuse>0.9 0.15 0.1 1</diffuse></material>
+        </visual>
       </link>
     </model>
   </world>
