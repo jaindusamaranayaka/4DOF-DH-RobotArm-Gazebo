@@ -8,565 +8,267 @@
     <origin xyz="0 0 0" rpy="0 0 0"/>
   </joint>
 
-  <link
-    name="base_link">
+  <link name="base_link">
     <inertial>
-      <origin
-        xyz="0.000961136394289371 3.65593868483968E-06 0.0954737230686579"
-        rpy="0 0 0" />
-      <mass
-        value="4.98758018997469" />
+      <origin xyz="0.000961136394289371 3.65593868483968E-06 0.0954737230686579" rpy="0 0 0" />
+      <mass value="4.98758018997469" />
       <inertia
-        ixx="0.0256664536768734"
-        ixy="-2.6130982523677E-05"
-        ixz="-0.000156900797413396"
-        iyy="0.025065385505013"
-        iyz="4.76541342965322E-05"
-        izz="0.0215539874831693" />
+        ixx="0.0256664536768734" ixy="-2.6130982523677E-05" ixz="-0.000156900797413396"
+        iyy="0.025065385505013" iyz="4.76541342965322E-05" izz="0.0215539874831693" />
     </inertial>
     <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://gp7_description/meshes/base_link.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
-      </material>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry><mesh filename="package://gp7_description/meshes/base_link.STL" /></geometry>
+      <material name=""><color rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" /></material>
     </visual>
     <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://gp7_description/meshes/base_link.STL" />
-      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry><mesh filename="package://gp7_description/meshes/base_link.STL" /></geometry>
     </collision>
   </link>
-  <link
-    name="link1">
+
+  <link name="link1">
     <inertial>
-      <origin
-        xyz="-0.00214174847207693 0.0154799901133211 0.0780025309257852"
-        rpy="0 0 0" />
-      <mass
-        value="2.94296490722247" />
+      <origin xyz="-0.00214174847207693 0.0154799901133211 0.0780025309257852" rpy="0 0 0" />
+      <mass value="2.94296490722247" />
       <inertia
-        ixx="0.0119311871908926"
-        ixy="0.000108643730577658"
-        ixz="0.000316035460974732"
-        iyy="0.0111969971460323"
-        iyz="-0.00215622055283929"
-        izz="0.00886866150600084" />
+        ixx="0.0119311871908926" ixy="0.000108643730577658" ixz="0.000316035460974732"
+        iyy="0.0111969971460323" iyz="-0.00215622055283929" izz="0.00886866150600084" />
     </inertial>
     <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://gp7_description/meshes/link1.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
-      </material>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry><mesh filename="package://gp7_description/meshes/link1.STL" /></geometry>
+      <material name=""><color rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" /></material>
     </visual>
     <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://gp7_description/meshes/link1.STL" />
-      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry><mesh filename="package://gp7_description/meshes/link1.STL" /></geometry>
     </collision>
   </link>
-  <joint
-    name="joint1"
-    type="revolute">
-    <origin
-      xyz="0 0 0.212"
-      rpy="0 0 1.3863" />
-    <parent
-      link="base_link" />
-    <child
-      link="link1" />
-    <axis
-      xyz="0 0 1" />
-    <!-- EXPANDED LIMITS TO ALLOW 90-DEGREE SHORT PATH -->
-    <limit
-      lower="-6.28"
-      upper="6.28"
-      effort="100"
-      velocity="3" />
+
+  <joint name="joint1" type="revolute">
+    <origin xyz="0 0 0.212" rpy="0 0 1.3863" />
+    <parent link="base_link" />
+    <child link="link1" />
+    <axis xyz="0 0 1" />
+    <limit lower="-6.28" upper="6.28" effort="100" velocity="3" />
   </joint>
-  <link
-    name="link2">
+
+  <link name="link2">
     <inertial>
-      <origin
-        xyz="-0.175477683386515 -0.0826341381873712 0.00761987821195446"
-        rpy="0 0 0" />
-      <mass
-        value="6.23361826882283" />
+      <origin xyz="-0.175477683386515 -0.0826341381873712 0.00761987821195446" rpy="0 0 0" />
+      <mass value="6.23361826882283" />
       <inertia
-        ixx="0.0363327377145451"
-        ixy="-0.0276254876426323"
-        ixz="0.00272835635534059"
-        iyy="0.117815713633862"
-        iyz="0.000754968687416639"
-        izz="0.11042572798737" />
+        ixx="0.0363327377145451" ixy="-0.0276254876426323" ixz="0.00272835635534059"
+        iyy="0.117815713633862" iyz="0.000754968687416639" izz="0.11042572798737" />
     </inertial>
     <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://gp7_description/meshes/link2.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.380392156862745 0.47843137254902 0.788235294117647 1" />
-      </material>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry><mesh filename="package://gp7_description/meshes/link2.STL" /></geometry>
+      <material name=""><color rgba="0.380392156862745 0.47843137254902 0.788235294117647 1" /></material>
     </visual>
     <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://gp7_description/meshes/link2.STL" />
-      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry><mesh filename="package://gp7_description/meshes/link2.STL" /></geometry>
     </collision>
   </link>
-  <joint
-    name="joint2"
-    type="revolute">
-    <origin
-      xyz="-0.0057538 0.039104 0.12075"
-      rpy="-1.4423 1.2518 -1.3096" />
-    <parent
-      link="link1" />
-    <child
-      link="link2" />
-    <axis
-      xyz="0 0 -1" />
-    <limit
-      lower="-3.14"
-      upper="3.14"
-      effort="100"
-      velocity="3" />
+
+  <joint name="joint2" type="revolute">
+    <origin xyz="-0.0057538 0.039104 0.12075" rpy="-1.4423 1.2518 -1.3096" />
+    <parent link="link1" />
+    <child link="link2" />
+    <axis xyz="0 0 -1" />
+    <limit lower="-3.14" upper="3.14" effort="100" velocity="3" />
   </joint>
-  <link
-    name="link3">
+
+  <link name="link3">
     <inertial>
-      <origin
-        xyz="-0.0217552751470335 0.015403877126641 -0.000435282606464638"
-        rpy="0 0 0" />
-      <mass
-        value="2.84915089782467" />
+      <origin xyz="-0.0217552751470335 0.015403877126641 -0.000435282606464638" rpy="0 0 0" />
+      <mass value="2.84915089782467" />
       <inertia
-        ixx="0.00693680398595382"
-        ixy="-0.000903824897557881"
-        ixz="6.60568247451266E-05"
-        iyy="0.00823149532385273"
-        iyz="-1.0108053194781E-05"
-        izz="0.00778922986463816" />
+        ixx="0.00693680398595382" ixy="-0.000903824897557881" ixz="6.60568247451266E-05"
+        iyy="0.00823149532385273" iyz="-1.0108053194781E-05" izz="0.00778922986463816" />
     </inertial>
     <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://gp7_description/meshes/link3.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.380392156862745 0.47843137254902 0.788235294117647 1" />
-      </material>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry><mesh filename="package://gp7_description/meshes/link3.STL" /></geometry>
+      <material name=""><color rgba="0.380392156862745 0.47843137254902 0.788235294117647 1" /></material>
     </visual>
     <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://gp7_description/meshes/link3.STL" />
-      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry><mesh filename="package://gp7_description/meshes/link3.STL" /></geometry>
     </collision>
   </link>
-  <joint
-    name="joint3"
-    type="revolute">
-    <origin
-      xyz="-0.42059 -0.12999 0.017646"
-      rpy="3.1412 0.064464 0.29976" />
-    <parent
-      link="link2" />
-    <child
-      link="link3" />
-    <axis
-      xyz="0 0 -1" />
-    <limit
-      lower="-3.14"
-      upper="3.14"
-      effort="100"
-      velocity="3" />
+
+  <joint name="joint3" type="revolute">
+    <origin xyz="-0.42059 -0.12999 0.017646" rpy="3.1412 0.064464 0.29976" />
+    <parent link="link2" />
+    <child link="link3" />
+    <axis xyz="0 0 -1" />
+    <limit lower="-3.14" upper="3.14" effort="100" velocity="3" />
   </joint>
-  <link
-    name="link4">
+
+  <link name="link4">
     <inertial>
-      <origin
-        xyz="-0.460080795228323 -0.00223490382587549 -0.0532341320089011"
-        rpy="0 0 0" />
-      <mass
-        value="2.58837095620371" />
+      <origin xyz="-0.460080795228323 -0.00223490382587549 -0.0532341320089011" rpy="0 0 0" />
+      <mass value="2.58837095620371" />
       <inertia
-        ixx="0.00954968219895185"
-        ixy="-0.00147627289258834"
-        ixz="-0.000756724959355774"
-        iyy="0.00486353434742182"
-        iyz="-0.00306288649404507"
-        izz="0.00905717592010893" />
+        ixx="0.00954968219895185" ixy="-0.00147627289258834" ixz="-0.000756724959355774"
+        iyy="0.00486353434742182" iyz="-0.00306288649404507" izz="0.00905717592010893" />
     </inertial>
     <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://gp7_description/meshes/link4.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.380392156862745 0.47843137254902 0.788235294117647 1" />
-      </material>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry><mesh filename="package://gp7_description/meshes/link4.STL" /></geometry>
+      <material name=""><color rgba="0.380392156862745 0.47843137254902 0.788235294117647 1" /></material>
     </visual>
     <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://gp7_description/meshes/link4.STL" />
-      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry><mesh filename="package://gp7_description/meshes/link4.STL" /></geometry>
     </collision>
   </link>
-  <joint
-    name="joint4"
-    type="fixed">
-    <origin
-      xyz="0.39605 -0.39068 -0.06817"
-      rpy="2.6782 0.053605 -0.24127" />
-    <parent
-      link="link3" />
-    <child
-      link="link4" />
-    <axis
-      xyz="0 0 0" />
-    <limit
-      lower="-3.14"
-      upper="3.14"
-      effort="100"
-      velocity="3" />
+
+  <joint name="joint4" type="fixed">
+    <origin xyz="0.39605 -0.39068 -0.06817" rpy="2.6782 0.053605 -0.24127" />
+    <parent link="link3" />
+    <child link="link4" />
+    <axis xyz="0 0 0" />
+    <limit lower="-3.14" upper="3.14" effort="100" velocity="3" />
   </joint>
-  <link
-    name="link5">
+
+  <link name="link5">
     <inertial>
-      <origin
-        xyz="-0.00016781545700012 -0.00716481833665938 -0.00197982284122036"
-        rpy="0 0 0" />
-      <mass
-        value="0.217153724437634" />
+      <origin xyz="-0.00016781545700012 -0.00716481833665938 -0.00197982284122036" rpy="0 0 0" />
+      <mass value="0.217153724437634" />
       <inertia
-        ixx="0.000127154336718445"
-        ixy="-2.19013980076813E-06"
-        ixz="-2.17685664271025E-07"
-        iyy="0.000131416386364215"
-        iyz="1.2886879887438E-06"
-        izz="0.000170874992897244" />
+        ixx="0.000127154336718445" ixy="-2.19013980076813E-06" ixz="-2.17685664271025E-07"
+        iyy="0.000131416386364215" iyz="1.2886879887438E-06" izz="0.000170874992897244" />
     </inertial>
     <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://gp7_description/meshes/link5.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.380392156862745 0.47843137254902 0.788235294117647 1" />
-      </material>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry><mesh filename="package://gp7_description/meshes/link5.STL" /></geometry>
+      <material name=""><color rgba="0.380392156862745 0.47843137254902 0.788235294117647 1" /></material>
     </visual>
     <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://gp7_description/meshes/link5.STL" />
-      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry><mesh filename="package://gp7_description/meshes/link5.STL" /></geometry>
     </collision>
   </link>
-  <joint
-    name="joint5"
-    type="revolute">
-    <origin
-      xyz="-0.41637 0.15922 0.023506"
-      rpy="3.0041 0.43147 -1.8178" />
-    <parent
-      link="link4" />
-    <child
-      link="link5" />
-    <axis
-      xyz="0 0 -1" />
-    <limit
-      lower="-3.14"
-      upper="3.14"
-      effort="100"
-      velocity="3" />
+
+  <joint name="joint5" type="revolute">
+    <origin xyz="-0.41637 0.15922 0.023506" rpy="3.0041 0.43147 -1.8178" />
+    <parent link="link4" />
+    <child link="link5" />
+    <axis xyz="0 0 -1" />
+    <limit lower="-3.14" upper="3.14" effort="100" velocity="3" />
   </joint>
-  <link
-    name="link6">
+
+  <link name="link6">
     <inertial>
-      <origin
-        xyz="-2.19817833824187E-06 -3.0470632524638E-05 0.065871217165695"
-        rpy="0 0 0" />
-      <mass
-        value="0.0529241411600098" />
+      <origin xyz="-2.19817833824187E-06 -3.0470632524638E-05 0.065871217165695" rpy="0 0 0" />
+      <mass value="0.0529241411600098" />
       <inertia
-        ixx="1.72633856796232E-05"
-        ixy="1.68296185966098E-09"
-        ixz="1.49369666121796E-10"
-        iyy="1.9577125668862E-05"
-        iyz="2.07125188071286E-09"
-        izz="3.4327788410668E-05" />
+        ixx="1.72633856796232E-05" ixy="1.68296185966098E-09" ixz="1.49369666121796E-10"
+        iyy="1.9577125668862E-05" iyz="2.07125188071286E-09" izz="3.4327788410668E-05" />
     </inertial>
     <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://gp7_description/meshes/link6.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.380392156862745 0.47843137254902 0.788235294117647 1" />
-      </material>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry><mesh filename="package://gp7_description/meshes/link6.STL" /></geometry>
+      <material name=""><color rgba="0.380392156862745 0.47843137254902 0.788235294117647 1" /></material>
     </visual>
     <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://gp7_description/meshes/link6.STL" />
-      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry><mesh filename="package://gp7_description/meshes/link6.STL" /></geometry>
     </collision>
   </link>
-  <joint
-    name="joint6"
-    type="revolute">
-    <origin
-      xyz="0 0 0"
-      rpy="1.5708 0 0.016709" />
-    <parent
-      link="link5" />
-    <child
-      link="link6" />
-    <axis
-      xyz="0 0 -1" />
-    <limit
-      lower="-3.14"
-      upper="3.14"
-      effort="100"
-      velocity="3" />
+
+  <joint name="joint6" type="revolute">
+    <origin xyz="0 0 0" rpy="1.5708 0 0.016709" />
+    <parent link="link5" />
+    <child link="link6" />
+    <axis xyz="0 0 -1" />
+    <limit lower="-3.14" upper="3.14" effort="100" velocity="3" />
   </joint>
-  <link
-    name="end_base">
+
+  <link name="end_base">
     <inertial>
-      <origin
-        xyz="0.015586041254788 -0.000155705917901816 -6.28829280313603E-12"
-        rpy="0 0 0" />
-      <mass
-        value="0.0685110730742369" />
+      <origin xyz="0.015586041254788 -0.000155705917901816 -6.28829280313603E-12" rpy="0 0 0" />
+      <mass value="0.0685110730742369" />
       <inertia
-        ixx="3.71400612580422E-05"
-        ixy="-5.81558462324167E-08"
-        ixz="-1.8783675424137E-15"
-        iyy="3.30435264316927E-05"
-        iyz="1.14300214089271E-17"
-        izz="1.62867903885833E-05" />
+        ixx="3.71400612580422E-05" ixy="-5.81558462324167E-08" ixz="-1.8783675424137E-15"
+        iyy="3.30435264316927E-05" iyz="1.14300214089271E-17" izz="1.62867903885833E-05" />
     </inertial>
     <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://gp7_description/meshes/end_base.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="1 1 1 1" />
-      </material>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry><mesh filename="package://gp7_description/meshes/end_base.STL" /></geometry>
+      <material name=""><color rgba="1 1 1 1" /></material>
     </visual>
     <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://gp7_description/meshes/end_base.STL" />
-      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry><mesh filename="package://gp7_description/meshes/end_base.STL" /></geometry>
     </collision>
   </link>
-  <joint
-    name="base1"
-    type="fixed">
-    <origin
-      xyz="0 0 0.11075"
-      rpy="1.5708 1.5593 0" />
-    <parent
-      link="link6" />
-    <child
-      link="end_base" />
-    <axis
-      xyz="0 0 0" />
+
+  <joint name="base1" type="fixed">
+    <origin xyz="0 0 0.11075" rpy="1.5708 1.5593 0" />
+    <parent link="link6" />
+    <child link="end_base" />
+    <axis xyz="0 0 0" />
   </joint>
-  <link
-    name="left">
+
+  <link name="left">
     <inertial>
-      <origin
-        xyz="0.0110307461078349 0.000266010486796364 -0.0273528261293923"
-        rpy="0 0 0" />
-      <mass
-        value="0.0182703887779316" />
+      <origin xyz="0.0110307461078349 0.000266010486796364 -0.0273528261293923" rpy="0 0 0" />
+      <mass value="0.0182703887779316" />
       <inertia
-        ixx="1.59513218661513E-05"
-        ixy="3.15699192496601E-07"
-        ixz="-1.38976870617434E-06"
-        iyy="1.67433890006241E-05"
-        iyz="-1.08218530204914E-07"
-        izz="4.25987165988197E-06" />
+        ixx="1.59513218661513E-05" ixy="3.15699192496601E-07" ixz="-1.38976870617434E-06"
+        iyy="1.67433890006241E-05" iyz="-1.08218530204914E-07" izz="4.25987165988197E-06" />
     </inertial>
     <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://gp7_description/meshes/left.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.952941176470588 0.952941176470588 0.952941176470588 1" />
-      </material>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry><mesh filename="package://gp7_description/meshes/left.STL" /></geometry>
+      <material name=""><color rgba="0.952941176470588 0.952941176470588 0.952941176470588 1" /></material>
     </visual>
     <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://gp7_description/meshes/left.STL" />
-      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry><mesh filename="package://gp7_description/meshes/left.STL" /></geometry>
     </collision>
   </link>
-  <joint
-    name="left_finger_joint"
-    type="prismatic">
-    <origin
-      xyz="0 0 0"
-      rpy="3.1416 0 0" />
-    <parent
-      link="end_base" />
-    <child
-      link="left" />
-    <axis
-      xyz="0 0 -1" />
-    <limit
-      lower="-0.05"
-      upper="0.035"
-      effort="1000"
-      velocity="2" />
-    <dynamics damping="10.0" friction="1.0" />
+
+  <joint name="left_finger_joint" type="prismatic">
+    <origin xyz="0 0 0" rpy="3.1416 0 0" />
+    <parent link="end_base" />
+    <child link="left" />
+    <axis xyz="0 0 -1" />
+    <limit lower="-0.05" upper="0.035" effort="15" velocity="0.5" />
+    <dynamics damping="1.0" friction="0.5" />
   </joint>
-  <link
-    name="right">
+
+  <link name="right">
     <inertial>
-      <origin
-        xyz="0.0110339461468294 1.23933344440275E-05 -0.0273528261411486"
-        rpy="0 0 0" />
-      <mass
-        value="0.0182703887779317" />
+      <origin xyz="0.0110339461468294 1.23933344440275E-05 -0.0273528261411486" rpy="0 0 0" />
+      <mass value="0.0182703887779317" />
       <inertia
-        ixx="1.59662494935259E-05"
-        ixy="3.33566829133192E-07"
-        ixz="-1.39188898395519E-06"
-        iyy="1.67284613727484E-05"
-        iyz="-7.62454533653818E-08"
-        izz="4.25987166038315E-06" />
+        ixx="1.59662494935259E-05" ixy="3.33566829133192E-07" ixz="-1.39188898395519E-06"
+        iyy="1.67284613727484E-05" iyz="-7.62454533653818E-08" izz="4.25987166038315E-06" />
     </inertial>
     <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://gp7_description/meshes/right.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.952941176470588 0.952941176470588 0.952941176470588 1" />
-      </material>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry><mesh filename="package://gp7_description/meshes/right.STL" /></geometry>
+      <material name=""><color rgba="0.952941176470588 0.952941176470588 0.952941176470588 1" /></material>
     </visual>
     <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://gp7_description/meshes/right.STL" />
-      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry><mesh filename="package://gp7_description/meshes/right.STL" /></geometry>
     </collision>
   </link>
-  <joint
-    name="right_finger_joint"
-    type="prismatic">
-    <origin
-      xyz="0 0 0"
-      rpy="0 0 0" />
-    <parent
-      link="end_base" />
-    <child
-      link="right" />
-    <axis
-      xyz="0 0 -1" />
-    <limit
-      lower="-0.05"
-      upper="0.035"
-      effort="1000"
-      velocity="2" />
-    <dynamics damping="10.0" friction="1.0" />
+
+  <joint name="right_finger_joint" type="prismatic">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="end_base" />
+    <child link="right" />
+    <axis xyz="0 0 -1" />
+    <limit lower="-0.05" upper="0.035" effort="15" velocity="0.5" />
+    <dynamics damping="1.0" friction="0.5" />
   </joint>
 
   <ros2_control name="IgnitionSystem" type="system">
@@ -581,28 +283,31 @@
     <joint name="left_finger_joint"><command_interface name="position"/><state_interface name="position"/><state_interface name="velocity"/></joint>
     <joint name="right_finger_joint"><command_interface name="position"/><state_interface name="position"/><state_interface name="velocity"/></joint>
   </ros2_control>
+
   <gazebo>
     <plugin filename="ign_ros2_control-system" name="ign_ros2_control::IgnitionROS2ControlPlugin">
       <parameters>$(find gp7_description)/config/controllers.yaml</parameters>
     </plugin>
+
+    <!-- Rigidly locks box_b to the wrist during transit (zero slipping or throwing) -->
+    <plugin filename="ignition-gazebo-detachable-joint-system"
+            name="ignition::gazebo::systems::DetachableJoint">
+      <parent_link>link6</parent_link>
+      <child_model>box_b</child_model>
+      <child_link>link</child_link>
+      <detach_topic>/box_b/detach</detach_topic>
+      <attach_topic>/box_b/attach</attach_topic>
+      <output_topic>/box_b/state</output_topic>
+    </plugin>
   </gazebo>
-  
-  <!-- High friction rubber parameters to prevent box slipping -->
+
   <gazebo reference="left">
-    <mu1>100.0</mu1>
-    <mu2>100.0</mu2>
-    <minDepth>0.001</minDepth>
-    <maxVel>0.0</maxVel>
-    <kp>1000000.0</kp>
-    <kd>1.0</kd>
+    <mu1>5.0</mu1>
+    <mu2>5.0</mu2>
   </gazebo>
-  
+
   <gazebo reference="right">
-    <mu1>100.0</mu1>
-    <mu2>100.0</mu2>
-    <minDepth>0.001</minDepth>
-    <maxVel>0.0</maxVel>
-    <kp>1000000.0</kp>
-    <kd>1.0</kd>
+    <mu1>5.0</mu1>
+    <mu2>5.0</mu2>
   </gazebo>
 </robot>

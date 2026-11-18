@@ -1,17 +1,9 @@
 #!/usr/bin/env python3
 """
-GP7 Robot Arm — Pick and Place Autonomous Controller
-
-ROS 2 controller for:
-1. Moving above Box B.
-2. Descending to grasp Box B.
-3. Closing the gripper.
-4. Lifting Box B.
-5. Transporting Box B to Box A along a smooth minimum-jerk straight-line path.
-6. Releasing Box B.
-7. Returning to the home position.
+GP7 Robot Arm — Pick and Place Autonomous Controller (with DetachableJoint)
 """
 
+import subprocess
 import time
 import threading
 
@@ -28,7 +20,6 @@ class PickAndPlaceNode(Node):
     def __init__(self):
         super().__init__('gp7_pick_and_place')
 
-        # ROS 2 Publishers
         self.arm_pub = self.create_publisher(
             JointTrajectory,
             '/arm_controller/joint_trajectory',
@@ -41,16 +32,8 @@ class PickAndPlaceNode(Node):
             10
         )
 
-        # Active GP7 joints (joint4 is fixed).
-        self.arm_joints = [
-            'joint1',
-            'joint2',
-            'joint3',
-            'joint5',
-            'joint6'
-        ]
+        self.arm_joints = ['joint1', 'joint2', 'joint3', 'joint5', 'joint6']
 
-        # Gripper Background Publishing
         self._target_gripper = None
         self._gripper_running = True
         self._gripper_lock = threading.Lock()
@@ -101,6 +84,20 @@ class PickAndPlaceNode(Node):
         self.get_logger().info(f'Gripper target: {displacement:.4f} m')
         time.sleep(wait_time)
 
+    def attach_box(self):
+        subprocess.run(
+            ['ign', 'topic', '-t', '/box_b/attach', '-m', 'ignition.msgs.Empty', '-p', ' '],
+            check=False
+        )
+        self.get_logger().info('Attached box_b to gripper via DetachableJoint.')
+
+    def detach_box(self):
+        subprocess.run(
+            ['ign', 'topic', '-t', '/box_b/detach', '-m', 'ignition.msgs.Empty', '-p', ' '],
+            check=False
+        )
+        self.get_logger().info('Detached box_b from gripper via DetachableJoint.')
+
     def publish_trajectory(self, waypoints, durations):
         if len(waypoints) != len(durations):
             raise ValueError('Number of waypoints and durations must match.')
@@ -138,7 +135,7 @@ class PickAndPlaceNode(Node):
                 t = (k / n_steps) * T
                 tau = t / T
 
-                # Quintic minimum-jerk profile: s(0)=0, s(1)=1, s'(0)=s'(1)=0
+                # Quintic minimum-jerk profile
                 s = 10 * tau**3 - 15 * tau**4 + 6 * tau**5
                 s_dot = (30 * tau**2 - 60 * tau**3 + 30 * tau**4) / T
 
@@ -187,14 +184,15 @@ class PickAndPlaceNode(Node):
         q_t2       = [ 3.1781,  0.3328, -0.5408,  0.8897,  0.7854]
         q_t3       = [ 3.6502,  0.4050, -0.3701,  0.7913,  0.7854]
 
-        # Place & retract above Box A (Z = 0.225 m resting height)
+        # Place & retract above Box A (end_base Z = 0.225 m -> Box B bottom ~8.8 mm above Box A)
         q_preplace = [ 3.9916,  0.6602,  0.0988,  0.5777,  0.7852]
         q_place    = [ 3.9978,  0.8348,  0.0492,  0.8017,  0.7854]
         q_retract  = [ 3.9916,  0.6601,  0.0987,  0.5777,  0.7854]
         q_home_end = [ 4.7373,  0.0017, -0.4859,  0.0000,  0.0000]
 
-        # STEP 1: Open gripper
-        self.get_logger().info('STEP 1: Opening gripper...')
+        # STEP 1: Detach box_b first (plugin starts attached on spawn) & open gripper
+        self.get_logger().info('STEP 1: Ensuring box_b is detached and opening gripper...')
+        self.detach_box()
         self.set_gripper(displacement=0.030, wait_time=1.5)
 
         # STEP 2: Move above Box B
@@ -205,9 +203,11 @@ class PickAndPlaceNode(Node):
         self.get_logger().info('STEP 3: Descending to grasp position...')
         self.publish_trajectory([q_pregrasp, q_grasp], [0.5, 2.0])
 
-        # STEP 4: Close gripper
-        self.get_logger().info('STEP 4: Closing gripper around Box B...')
-        self.set_gripper(displacement=-0.01402, wait_time=1.5)
+        # STEP 4: Close fingers lightly (no overlap pressure) & lock box_b
+        self.get_logger().info('STEP 4: Closing gripper and locking Box B...')
+        self.set_gripper(displacement=-0.011, wait_time=1.0)
+        self.attach_box()
+        time.sleep(0.5)
 
         # STEP 5: Lift Box B
         self.get_logger().info('STEP 5: Lifting Box B...')
@@ -224,9 +224,11 @@ class PickAndPlaceNode(Node):
         self.get_logger().info('STEP 7: Lowering Box B onto Box A...')
         self.publish_trajectory([q_preplace, q_place], [0.5, 3.5])
 
-        # STEP 8: Release Box B
-        self.get_logger().info('STEP 8: Releasing Box B...')
-        self.set_gripper(displacement=0.030, wait_time=1.5)
+        # STEP 8: Detach Box B & open gripper
+        self.get_logger().info('STEP 8: Detaching and releasing Box B...')
+        self.detach_box()
+        time.sleep(0.2)
+        self.set_gripper(displacement=0.030, wait_time=1.2)
 
         # STEP 9: Retract
         self.get_logger().info('STEP 9: Retracting the gripper...')
