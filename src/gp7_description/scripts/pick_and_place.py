@@ -234,13 +234,13 @@ class PickAndPlaceNode(Node):
         # =========================================================================
         # Joint vector format: [joint1, joint2, joint3, joint5, joint6]
         q_home      = [-1.5459,  0.0017, -0.4859,  0.0000,  0.0000]  # Safe elevated parking
-        q_pregrasp  = [ 2.4316,  0.9367,  0.0586,  0.8941,  0.0000]  # Hover above Box B (0.50, -0.50, 0.160 m)
-        q_grasp     = [ 2.4411,  1.1207,  0.1209,  1.0158,  0.0000]  # Vertical grasp at (0.50, -0.50, 0.055 m)
-        q_lift      = [ 2.4239,  0.7568,  0.0576,  0.7153,  0.0000]  # Vertical lift to Z = 0.280 m
-        q_transit   = [ 0.0662,  0.7084,  0.0781,  0.6465,  0.0000]  # Smooth elevated horizontal transit arc
-        q_preplace  = [-2.2916,  0.6600,  0.0985,  0.5778,  0.0000]  # Hover above Box A (0.50, 0.50, 0.360 m)
-        q_place     = [-2.2871,  0.7911,  0.0517,  0.7555,  0.0000]  # Vertical place atop Box A (0.50, 0.50, 0.255 m)
-        q_retract   = [-2.2916,  0.6600,  0.0985,  0.5778,  0.0000]  # Vertical retract to Z = 0.360 m
+        q_pregrasp  = [ 2.4316,  0.9367,  0.0586,  0.8941,  0.7854]  # Hover above Box B (0.50, -0.50, 0.160 m)
+        q_grasp     = [ 2.4411,  1.1800,  0.1209,  1.0158,  0.7854]  # Vertical grasp at (0.50, -0.50, 0.055 m)
+        q_lift      = [ 2.4239,  0.7568,  0.0576,  0.7153,  0.7854]  # Vertical lift to Z = 0.280 m
+        q_transit   = [ 0.0662,  0.7084,  0.0781,  0.6465, 0.7854]  # Smooth elevated horizontal transit arc
+        q_preplace  = [-2.2916,  0.6600,  0.0985,  0.5778,  0.7854]  # Hover above Box A (0.50, 0.50, 0.360 m)
+        q_place     = [-2.2871,  0.7911,  0.0517,  0.7555,  0.7854]  # Vertical place atop Box A (0.50, 0.50, 0.255 m)
+        q_retract   = [-2.2916,  0.6600,  0.0985,  0.5778,  0.7854]  # Vertical retract to Z = 0.360 m
 
         # Step 1: Open Gripper Wide (0.030 m)
         self.get_logger().info('Step 1: Opening gripper wide (displacement = 0.030 m)...')
@@ -256,7 +256,7 @@ class PickAndPlaceNode(Node):
 
         # Step 4: Symmetrically Clamp Box B (0.000 m = closed grip)
         self.get_logger().info('Step 4: Clamping Box B firmly (displacement = 0.000 m)...')
-        self.set_gripper(0.000, wait_time=2.0)
+        self.set_gripper(-0.03, wait_time=2.0)
 
         # Step 5: Vertical Lift (Keeping Box B strictly upright)
         self.get_logger().info('Step 5: Lifting Box B vertically to Z = 0.280 m (upright)...')
